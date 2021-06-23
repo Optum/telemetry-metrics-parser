@@ -1,9 +1,9 @@
-<Insert Project Name Here>
+telemetry-metrics-parser
 Copyright 2021 Optum
 
 Project Description:
 ====================
-<Short description of your project>
+A ruby gem designed to parse metric formats like InfluxDB Line Protocol into Ruby hashes
 
 Author(s):
-<List the names and GitHub IDs of the original project authors>
+Esity
