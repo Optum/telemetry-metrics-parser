@@ -43,6 +43,16 @@ module Telemetry
           results
         end
         module_function :split_string_to_hash
+
+        def to_line_protocol(measurement:, fields:, tags: {}, timestamp: DateTime.now.strftime('%Q'))
+          "#{measurement},#{hash_to_line(tags)} #{hash_to_line(fields)} #{timestamp}"
+        end
+        module_function :to_line_protocol
+
+        def hash_to_line(hash)
+          hash.map { |k, v| "#{k}=#{v}" }.join(',').strip.delete_suffix(',')
+        end
+        module_function :hash_to_line
       end
     end
   end

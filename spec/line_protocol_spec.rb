@@ -30,4 +30,30 @@ RSpec.describe Telemetry::Metrics::Parser::LineProtocol do
     expect(described_class.get_measurement('test,location=foo')).to eq 'test'
     expect(described_class.get_measurement('location=foo,test=baz')).to be_nil
   end
+
+  it 'can to_line_protocol' do
+    expect(
+      described_class.to_line_protocol(
+        measurement: 'test',
+        tags: { foo: 'bar' },
+        fields: { hello: 'world' },
+        timestamp: 1_000_000_000
+      )
+    ).to eq 'test,foo=bar hello=world 1000000000'
+
+    expect(
+      described_class.to_line_protocol(
+        measurement: 'test',
+        tags: { foo: 'bar', tag: 'test' },
+        fields: { hello: 4444, field: '120202' },
+        timestamp: 1_000_000_000
+      )
+    ).to eq 'test,foo=bar,tag=test hello=4444,field=120202 1000000000'
+  end
+
+  it 'can hash_to_line' do
+    expect(described_class.hash_to_line({ foo: 'bar', test: 'baz' })).to eq 'foo=bar,test=baz'
+    expect(described_class.hash_to_line({ foo: 'bar' })).to eq 'foo=bar'
+    expect(described_class.hash_to_line({ foo: 'bar', test: 123 })).to eq 'foo=bar,test=123'
+  end
 end

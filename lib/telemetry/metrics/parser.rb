@@ -4,10 +4,15 @@ require 'telemetry/metrics/parser/line_protocol'
 module Telemetry
   module Metrics
     module Parser
-      def line_protocol(line)
+      def from_line_protocol(line)
         Telemetry::Metrics::Parser::LineProtocol.parse(line)
       end
-      module_function :line_protocol
+      module_function :from_line_protocol
+
+      def to_line_protocol(**opts)
+        Telemetry::Metrics::Parser::LineProtocol.to_line_protocol(**opts)
+      end
+      module_function :to_line_protocol
     end
   end
 end
