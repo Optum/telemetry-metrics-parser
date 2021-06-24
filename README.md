@@ -3,6 +3,7 @@ A ruby gem designed to parse and process telemetry style metrics
 
 
 ## InfluxDB Line Protocol
+```
 # weather,location=us-midwest temperature=82 1465839830100400200
 #   |    -------------------- --------------  |
 #   |             |             |             |
@@ -10,6 +11,7 @@ A ruby gem designed to parse and process telemetry style metrics
 # +-----------+--------+-+---------+-+---------+
 # |measurement|,tag_set| |field_set| |timestamp|
 # +-----------+--------+-+---------+-+---------+
+```
 
 Example
 ```ruby
