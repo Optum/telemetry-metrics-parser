@@ -1,31 +1,29 @@
-# Welcome to your new OSS project
+# Telemetry::Metrics::Parser
+A ruby gem designed to parse and process telemetry style metrics
 
-This project currently has the base documentation files required.  Replace this
-file with your own README.md.
 
-## Files included
+## InfluxDB Line Protocol
+# weather,location=us-midwest temperature=82 1465839830100400200
+#   |    -------------------- --------------  |
+#   |             |             |             |
+#   |             |             |             |
+# +-----------+--------+-+---------+-+---------+
+# |measurement|,tag_set| |field_set| |timestamp|
+# +-----------+--------+-+---------+-+---------+
 
-**CODE_OF_CONDUCT.md**
+Example
+```ruby
+require 'telemetry/metrics/parser'
+results = Telemetry::Metrics::Parser.line_protocol('weather,location=us-midwest temperature=82 1465839830100400200')
 
-Use without changes
+results[:measurement] # => weather
+results[:tags] # => { location: 'us-midwest' }
+results[:fields] # => { temperature: 82 }
+results[:timestamp] # => 1465839830100400200
+```
 
-**INDIVIDUAL_CONTRIBUTOR_LICENSE.md**
 
-Use without changes
+Authors
+----------
 
-**CONTRIBUTING.md**
-
-This file has some portions that are required and others that can be customized.
-Customize the Coding Standards section to mention the languages used by your project.
-Feel free to add any rules and requirements that you would like people to follow
-when contributing to your project.
-
-**NOTICE.txt**
-
-This file is needed if your project is licensed under the Apache 2.0 license.  
-If you are using this license, fill it out according to the prompts.  Otherwise,
-delete this file.
-
-## Additional Repo Updates
-
-Make sure that you have a project description and appropriate repository topics.
+* [Matthew Iverson](https://github.com/Esity) - current maintainer

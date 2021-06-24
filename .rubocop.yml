@@ -1,9 +1,13 @@
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - 'spec/**'
 Metrics/MethodLength:
   Max: 100
 Metrics/ClassLength:
   Max: 1500
+Metrics/BlockLength:
+  Max: 100
 Style/Documentation:
   Enabled: false
 Style/ModuleFunction:
