@@ -2,12 +2,24 @@ Layout/LineLength:
   Max: 120
   Exclude:
     - 'spec/**'
+    - 'spec/ifql/**'
 Metrics/MethodLength:
   Max: 100
 Metrics/ClassLength:
   Max: 1500
 Metrics/BlockLength:
-  Max: 100
+  Max: 200
+Metrics/PerceivedComplexity:
+  Max: 13
+Metrics/CyclomaticComplexity:
+  Max: 11
+Metrics/AbcSize:
+  Exclude:
+    - 'spec/**'
+    - 'spec/ifql/**'
+    - 'lib/telemetry/ifql/parser.rb'
+Naming/MethodParameterName:
+  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/ModuleFunction:
@@ -17,6 +29,4 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
 Style/FrozenStringLiteralComment:
-  Enabled: false
-Naming/FileName:
   Enabled: false

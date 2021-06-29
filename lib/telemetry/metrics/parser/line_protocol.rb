@@ -1,11 +1,11 @@
 require 'shellwords'
-require 'telemetry/metrics/parser/number_helper'
+require 'telemetry/number_helper'
 
 module Telemetry
   module Metrics
     module Parser
       module LineProtocol
-        extend Telemetry::Metrics::Parser::NumberHelper
+        extend Telemetry::NumberHelper
 
         def parse(line, use_shellwords: false)
           if use_shellwords

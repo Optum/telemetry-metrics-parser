@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'telemetry/metrics/parser/number_helper'
+require 'telemetry/number_helper'
 
-RSpec.describe Telemetry::Metrics::Parser::NumberHelper do
+RSpec.describe Telemetry::NumberHelper do
   it 'can detect floats' do
     expect(described_class.float?('a')).to be_falsey
     expect(described_class.float?('111')).to be_falsey
