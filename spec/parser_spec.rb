@@ -20,4 +20,12 @@ RSpec.describe Telemetry::Metrics::Parser do
       )
     ).to eq 'test,foo=bar hello=world 1000000000'
   end
+
+  it 'can from_line_protocol without shellwords' do
+    expect(described_class.from_line_protocol('weather,location=us-midwest temperature=82 1465839830100400200', use_shellwords: false)).to be_a Hash
+  end
+
+  it 'can from_line_protocol with shellwords' do
+    expect(described_class.from_line_protocol('weather,location=us-midwest temperature=82 1465839830100400200', use_shellwords: true)).to be_a Hash
+  end
 end
