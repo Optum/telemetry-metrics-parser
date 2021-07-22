@@ -4,8 +4,8 @@ require 'telemetry/metrics/parser/line_protocol'
 module Telemetry
   module Metrics
     module Parser
-      def from_line_protocol(line)
-        Telemetry::Metrics::Parser::LineProtocol.parse(line)
+      def from_line_protocol(line, **opts)
+        Telemetry::Metrics::Parser::LineProtocol.parse(line, **opts)
       end
       module_function :from_line_protocol
 

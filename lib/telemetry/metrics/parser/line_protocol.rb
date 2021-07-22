@@ -7,11 +7,11 @@ module Telemetry
       module LineProtocol
         extend Telemetry::NumberHelper
 
-        def parse(line, use_shellwords: false)
+        def parse(line, use_shellwords: true)
           if use_shellwords
-            raw_tags, raw_fields, timestamp = Shellwords.split(line)
+            raw_tags, raw_fields, timestamp = Shellwords.split(line.strip)
           else
-            raw_tags, raw_fields, timestamp = line.split
+            raw_tags, raw_fields, timestamp = line.strip.split
           end
 
           {
@@ -33,6 +33,8 @@ module Telemetry
 
         def split_string_to_hash(raw_string)
           results = {}
+          return results if raw_string.nil?
+
           raw_string.split(',').each do |string|
             next unless string.include? '='
 
