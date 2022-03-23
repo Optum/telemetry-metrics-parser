@@ -24,6 +24,11 @@ results[:fields] # => { temperature: 82 }
 results[:timestamp] # => 1465839830100400200
 ```
 
+#### Validations
+```ruby
+Telemetry::Metrics::Parser::LineProtocol.line_is_valid?('weather,location=us-midwest temperature=82 1465839830100400200') # true
+Telemetry::Metrics::Parser::LineProtocol.line_is_valid?('weather,location=us-midwest temperature=this_field_is_a_string 1465839830100400200') # false but returned as a string error
+```
 
 Authors
 ----------
