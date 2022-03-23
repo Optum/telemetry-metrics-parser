@@ -56,15 +56,14 @@ module Telemetry
         end
         module_function :hash_to_line
 
-        def line_is_current?(timestamp, limit: 86_400)
+        def line_is_recent?(timestamp, max_age_sec: 86_400)
           return false unless timestamp.is_a?(Integer)
-          return false unless limit.is_a?(Integer)
+          return false unless max_age_sec.is_a?(Integer)
 
-          current_time = DateTime.now.strftime('%s%9N').to_i
-          time_limit = current_time - (limit * 1000 * 1000 * 1000 * 3)
-          timestamp >= time_limit
+          current_epoch_ns = DateTime.now.strftime('%s%9N').to_i
+          timestamp >= current_epoch_ns - (max_age_sec * 1000 * 1000 * 1000 * 3)
         end
-        module_function :line_is_current?
+        module_function :line_is_recent?
 
         def field_is_number?(value)
           return false if value.nil?
@@ -113,7 +112,7 @@ module Telemetry
 
         def line_is_valid?(line) # rubocop:disable Metrics/AbcSize
           line = parse(line) if line.is_a?(String)
-          return "line is too old, #{line}" unless line_is_current?(line[:timestamp])
+          return "line is too old, #{line}" unless line_is_recent?(line[:timestamp])
           return "line is missing influxdb_database, #{line}" unless node_group_tag? line[:tags]
           return "line is missing influxdb_node_group, #{line}" unless database_tag? line[:tags]
           return "measurement name #{line[:measurement]} is not valid" unless measurement_valid?(line[:measurement])

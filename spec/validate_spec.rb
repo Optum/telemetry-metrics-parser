@@ -33,9 +33,9 @@ RSpec.describe Telemetry::Metrics::Parser::LineProtocol do
   end
 
   it 'can validate the line is current' do
-    expect(described_class.line_is_current?(1_465_839_830_100_400_200)).to eq false
-    expect(described_class.line_is_current?(2_665_839_830_100_400_200)).to eq true
-    expect(described_class.line_is_current?('11111')).to eq false
+    expect(described_class.line_is_recent?(1_465_839_830_100_400_200)).to eq false
+    expect(described_class.line_is_recent?(2_665_839_830_100_400_200)).to eq true
+    expect(described_class.line_is_recent?('11111')).to eq false
   end
 
   it 'can verify a node_group tag exists' do
