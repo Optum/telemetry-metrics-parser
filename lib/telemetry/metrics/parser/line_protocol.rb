@@ -55,6 +55,84 @@ module Telemetry
           hash.map { |k, v| "#{k}=#{v}" }.join(',').strip.delete_suffix(',')
         end
         module_function :hash_to_line
+
+        def line_is_current?(timestamp, limit: 86_400)
+          return false unless timestamp.is_a?(Integer)
+          return false unless limit.is_a?(Integer)
+
+          current_time = DateTime.now.strftime('%s%9N').to_i
+          time_limit = current_time - (limit * 1000 * 1000 * 1000 * 3)
+          timestamp >= time_limit
+        end
+        module_function :line_is_current?
+
+        def field_is_number?(value)
+          return false if value.nil?
+          return true if value.is_a?(Integer)
+          return true if value.is_a?(Float)
+
+          %(f i).include?(value[-1])
+        end
+        module_function :field_is_number?
+
+        def tag_is_valid?(key, value)
+          return false if key.nil? || value.nil?
+          return false unless value.chars.detect { |ch| !valid_tag_chars.include?(ch) }.nil?
+          return false unless key.to_s.chars.detect { |ch| !valid_tag_chars.include?(ch) }.nil?
+
+          true
+        end
+        module_function :tag_is_valid?
+
+        def node_group_tag?(tags)
+          tags[:influxdb_node_group].is_a?(String)
+        end
+        module_function :node_group_tag?
+
+        def database_tag?(tags)
+          tags[:influxdb_database].is_a?(String)
+        end
+        module_function :database_tag?
+
+        def measurement_valid?(measurement)
+          return false unless measurement.is_a?(String)
+
+          measurement.chars.detect { |ch| !valid_measurement_chars.include?(ch) }.nil?
+        end
+        module_function :measurement_valid?
+
+        def valid_measurement_chars
+          @valid_measurement_chars ||= ('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a + %w[_ - .]
+        end
+        module_function :valid_measurement_chars
+
+        def valid_tag_chars
+          @valid_tag_chars ||= ('a'..'z').to_a + ('A'..'Z').to_a + (0..9).to_a + %w[_ - .]
+        end
+        module_function :valid_tag_chars
+
+        def line_is_valid?(line) # rubocop:disable Metrics/AbcSize
+          line = parse(line) if line.is_a?(String)
+          return "line is too old, #{line}" unless line_is_current?(line[:timestamp])
+          return "line is missing influxdb_database, #{line}" unless node_group_tag? line[:tags]
+          return "line is missing influxdb_node_group, #{line}" unless database_tag? line[:tags]
+          return "measurement name #{line[:measurement]} is not valid" unless measurement_valid?(line[:measurement])
+
+          line[:fields].each do |field, value|
+            next if field_is_number?(value)
+
+            return "field values must be an Integer or String, #{field} :#{value} #{value.class}"
+          end
+
+          line[:tags].each do |tag, value|
+            next if tag_is_valid?(tag, value)
+
+            return "tags must be a-z0-9_-. but was given #{tag}: #{value}"
+          end
+
+          true
+        end
+        module_function :line_is_valid?
       end
     end
   end
